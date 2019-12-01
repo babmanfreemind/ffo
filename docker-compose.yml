@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  ffo:
+    build: .
+    ports:
+      - "3000:3000"
+    networks:
+      - ffo_internal
+    depends_on:
+      - ffo_db
+    volumes:
+      - './config/database.yml:/home/ffo/config/database.yml'
+    environment:
+      - RAILS_ENV=$RAILS_ENV
+
+  ffo_db:
+    image: postgres
+    volumes:
+      - './data/postgres:/var/lib/postgresql/data'
+    ports:
+      - 5432:5432
+    networks:
+      - ffo_internal
+    environment:
+      - POSTGRES_PASSWORD=docker
+
+networks:
+  ffo_internal:
